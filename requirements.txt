@@ -8,3 +8,4 @@ pymysql>=1.1.0
 psutil>=5.9.0
 python-dotenv>=1.0.0
 numpy>=1.24.2
+curl_cffi
