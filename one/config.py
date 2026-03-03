@@ -9,7 +9,8 @@ MY_SHEERID_URL = 'https://my.sheerid.com'
 # 文件大小限制
 MAX_FILE_SIZE = 1 * 1024 * 1024  # 1MB
 
-# 学校配置 - 美国各州不知名州立大学
+# ============ 大学列表 (加权选择) ============
+# weight = 优先级 / 成功率预期 (越高越常选中)
 SCHOOLS = {
     # ========== Pennsylvania State University (PSU) campuses ==========
     '2565': {
