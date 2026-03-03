@@ -1,114 +1,109 @@
-"""随机名字生成器"""
+"""Real American name generator for student verification"""
 import random
 
 
+# Top 100 real American first names (mix of male/female)
+FIRST_NAMES_MALE = [
+    "James", "John", "Robert", "Michael", "William", "David", "Richard", "Joseph",
+    "Thomas", "Christopher", "Charles", "Daniel", "Matthew", "Anthony", "Mark",
+    "Donald", "Steven", "Andrew", "Paul", "Joshua", "Kenneth", "Kevin", "Brian",
+    "George", "Timothy", "Ronald", "Jason", "Edward", "Jeffrey", "Ryan",
+    "Jacob", "Gary", "Nicholas", "Eric", "Jonathan", "Stephen", "Larry",
+    "Justin", "Scott", "Brandon", "Benjamin", "Samuel", "Raymond", "Gregory",
+    "Frank", "Alexander", "Patrick", "Jack", "Dennis", "Nathan",
+    "Tyler", "Ethan", "Dylan", "Logan", "Mason", "Lucas", "Noah", "Liam",
+    "Owen", "Caleb", "Hunter", "Connor", "Adrian", "Evan", "Cole",
+]
+
+FIRST_NAMES_FEMALE = [
+    "Mary", "Patricia", "Jennifer", "Linda", "Barbara", "Elizabeth", "Susan",
+    "Jessica", "Sarah", "Karen", "Lisa", "Nancy", "Betty", "Margaret", "Sandra",
+    "Ashley", "Dorothy", "Kimberly", "Emily", "Donna", "Michelle", "Carol",
+    "Amanda", "Melissa", "Deborah", "Stephanie", "Rebecca", "Sharon", "Laura",
+    "Cynthia", "Kathleen", "Amy", "Angela", "Shirley", "Anna", "Brenda",
+    "Pamela", "Emma", "Nicole", "Helen", "Samantha", "Katherine", "Christine",
+    "Debra", "Rachel", "Carolyn", "Janet", "Catherine", "Maria", "Heather",
+    "Olivia", "Sophia", "Isabella", "Mia", "Charlotte", "Amelia", "Harper",
+    "Evelyn", "Abigail", "Ella", "Scarlett", "Grace", "Lily", "Hannah", "Aria",
+]
+
+# Real American last names (top 200 by frequency)
+LAST_NAMES = [
+    "Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis",
+    "Rodriguez", "Martinez", "Hernandez", "Lopez", "Gonzalez", "Wilson", "Anderson",
+    "Thomas", "Taylor", "Moore", "Jackson", "Martin", "Lee", "Perez", "Thompson",
+    "White", "Harris", "Sanchez", "Clark", "Ramirez", "Lewis", "Robinson",
+    "Walker", "Young", "Allen", "King", "Wright", "Scott", "Torres", "Nguyen",
+    "Hill", "Flores", "Green", "Adams", "Nelson", "Baker", "Hall", "Rivera",
+    "Campbell", "Mitchell", "Carter", "Roberts", "Gomez", "Phillips", "Evans",
+    "Turner", "Diaz", "Parker", "Cruz", "Edwards", "Collins", "Reyes",
+    "Stewart", "Morris", "Morales", "Murphy", "Cook", "Rogers", "Gutierrez",
+    "Ortiz", "Morgan", "Cooper", "Peterson", "Bailey", "Reed", "Kelly",
+    "Howard", "Ramos", "Kim", "Cox", "Ward", "Richardson", "Watson", "Brooks",
+    "Chavez", "Wood", "James", "Bennett", "Gray", "Mendoza", "Ruiz", "Hughes",
+    "Price", "Alvarez", "Castillo", "Sanders", "Patel", "Myers", "Long", "Ross",
+    "Foster", "Jimenez", "Powell", "Jenkins", "Perry", "Russell", "Sullivan",
+    "Bell", "Coleman", "Butler", "Henderson", "Barnes", "Gonzales", "Fisher",
+    "Vasquez", "Simmons", "Graham", "Murray", "Ford", "Castro", "Marshall",
+    "Owens", "Harrison", "Fernandez", "McDonald", "Woods", "Washington",
+    "Kennedy", "Wells", "Vargas", "Henry", "Chen", "Freeman", "Webb", "Tucker",
+    "Hicks", "Crawford", "Cunningham", "Watkins", "Harper", "Schmidt",
+]
+
+
 class NameGenerator:
-    """英文名字生成器"""
-    
-    ROOTS = {
-        'prefixes': ['Al', 'Bri', 'Car', 'Dan', 'El', 'Fer', 'Gar', 'Har', 'Jes', 'Kar', 
-                    'Lar', 'Mar', 'Nor', 'Par', 'Quin', 'Ros', 'Sar', 'Tar', 'Val', 'Wil'],
-        'middles': ['an', 'en', 'in', 'on', 'ar', 'er', 'or', 'ur', 'al', 'el', 
-                   'il', 'ol', 'am', 'em', 'im', 'om', 'ay', 'ey', 'oy', 'ian'],
-        'suffixes': ['ton', 'son', 'man', 'ley', 'field', 'ford', 'wood', 'stone', 'worth', 'berg',
-                    'stein', 'bach', 'heim', 'gard', 'land', 'wick', 'shire', 'dale', 'brook', 'ridge'],
-        'name_roots': ['Alex', 'Bern', 'Crist', 'Dav', 'Edw', 'Fred', 'Greg', 'Henr', 'Ivan', 'John',
-                      'Ken', 'Leon', 'Mich', 'Nick', 'Oliv', 'Paul', 'Rich', 'Step', 'Thom', 'Will'],
-        'name_endings': ['a', 'e', 'i', 'o', 'y', 'ie', 'ey', 'an', 'en', 'in', 
-                        'on', 'er', 'ar', 'or', 'el', 'al', 'iel', 'ael', 'ine', 'lyn']
-    }
-    
-    PATTERNS = {
-        'first_name': [
-            ['prefix', 'ending'],
-            ['name_root', 'ending'],
-            ['prefix', 'middle', 'ending'],
-            ['name_root', 'middle', 'ending']
-        ],
-        'last_name': [
-            ['prefix', 'suffix'],
-            ['name_root', 'suffix'],
-            ['prefix', 'middle', 'suffix'],
-            ['compound']
-        ]
-    }
-    
-    @classmethod
-    def _generate_component(cls, pattern):
-        """根据模式生成名字组件"""
-        components = []
-        for part in pattern:
-            if part == 'prefix':
-                component = random.choice(cls.ROOTS['prefixes'])
-            elif part == 'middle':
-                component = random.choice(cls.ROOTS['middles'])
-            elif part == 'suffix':
-                component = random.choice(cls.ROOTS['suffixes'])
-            elif part == 'name_root':
-                component = random.choice(cls.ROOTS['name_roots'])
-            elif part == 'ending':
-                component = random.choice(cls.ROOTS['name_endings'])
-            elif part == 'compound':
-                part1 = random.choice(cls.ROOTS['prefixes'])
-                part2 = random.choice(cls.ROOTS['suffixes'])
-                component = part1 + part2
-            else:
-                component = ''
-            
-            components.append(component)
-        
-        return ''.join(components)
-    
-    @classmethod
-    def _format_name(cls, name):
-        """格式化名字（首字母大写）"""
-        return name.capitalize()
-    
+    """Real American name generator"""
+
     @classmethod
     def generate(cls):
-        """
-        生成随机英文名字
-        
+        """Generate a realistic random American name.
+
         Returns:
-            dict: 包含 first_name, last_name, full_name
+            dict with first_name, last_name, full_name
         """
-        first_name_pattern = random.choice(cls.PATTERNS['first_name'])
-        last_name_pattern = random.choice(cls.PATTERNS['last_name'])
-        
-        first_name = cls._generate_component(first_name_pattern)
-        last_name = cls._generate_component(last_name_pattern)
-        
+        # 50/50 male/female
+        if random.random() < 0.5:
+            first_name = random.choice(FIRST_NAMES_MALE)
+        else:
+            first_name = random.choice(FIRST_NAMES_FEMALE)
+
+        last_name = random.choice(LAST_NAMES)
+
+        # 50% chance of middle initial
+        if random.random() < 0.5:
+            middle_initial = random.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+            full_name = f"{first_name} {middle_initial}. {last_name}"
+        else:
+            full_name = f"{first_name} {last_name}"
+
         return {
-            'first_name': cls._format_name(first_name),
-            'last_name': cls._format_name(last_name),
-            'full_name': f"{cls._format_name(first_name)} {cls._format_name(last_name)}"
+            "first_name": first_name,
+            "last_name": last_name,
+            "full_name": full_name,
         }
 
 
-def generate_email(school_domain='MIT.EDU'):
-    """
-    生成随机学校邮箱
-    
+def generate_email(school_domain="PSU.EDU"):
+    """Generate a random school email.
+
     Args:
-        school_domain: 学校域名
-    
+        school_domain: School domain
+
     Returns:
-        str: 邮箱地址
+        str: Email address
     """
-    chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-    username = ''.join(random.choice(chars) for _ in range(8))
+    chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+    username = "".join(random.choice(chars) for _ in range(8))
     return f"{username}@{school_domain}"
 
 
 def generate_birth_date():
-    """
-    生成随机生日（2000-2005年）
-    
+    """Generate a random birth date (1998-2005).
+
     Returns:
-        str: YYYY-MM-DD 格式的日期
+        str: YYYY-MM-DD format
     """
-    year = 2000 + random.randint(0, 5)
+    year = random.randint(1998, 2005)
     month = str(random.randint(1, 12)).zfill(2)
     day = str(random.randint(1, 28)).zfill(2)
     return f"{year}-{month}-{day}"
-
