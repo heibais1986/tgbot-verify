@@ -1,4 +1,5 @@
 # SheerID 验证配置文件
+import random
 
 # SheerID API 配置
 PROGRAM_ID = '67c8c14f5f17a83b745e3f82'
