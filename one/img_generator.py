@@ -66,11 +66,11 @@ def generate_psu_id():
     return f"9{random.randint(10000000, 99999999)}"
 
 
-def generate_psu_email(first_name, last_name):
-    """Generate PSU email: firstName.lastName + 3-4 digits @psu.edu"""
+def generate_psu_email(first_name, last_name, domain="psu.edu"):
+    """Generate student email: firstName.lastName + 3-4 digits @domain"""
     digit_count = random.choice([3, 4])
     digits = ''.join([str(random.randint(0, 9)) for _ in range(digit_count)])
-    email = f"{first_name.lower()}.{last_name.lower()}{digits}@psu.edu"
+    email = f"{first_name.lower()}.{last_name.lower()}{digits}@{domain.lower()}"
     return email
 
 

@@ -242,7 +242,7 @@ SCHOOLS = {
 }
 
 # 默认学校
-DEFAULT_SCHOOL_ID = '1001'
+DEFAULT_SCHOOL_ID = '2565'
 
 # UTM 参数（营销追踪参数）
 # 如果 URL 中没有这些参数，会自动添加

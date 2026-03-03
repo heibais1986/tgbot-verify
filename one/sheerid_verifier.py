@@ -129,7 +129,7 @@ class SheerIDVerifier:
             school = config.SCHOOLS[school_id]
 
             if not email:
-                email = generate_psu_email(first_name, last_name)
+                email = generate_psu_email(first_name, last_name, school['domain'])
             if not birth_date:
                 birth_date = generate_birth_date()
 
