@@ -251,3 +251,8 @@ DEFAULT_UTM_PARAMS = {
     'utm_campaign': 'students_pmax_bts-slap'
 }
 
+def get_random_school_id():
+    """Weighted random selection — higher weight = more likely to be chosen."""
+    ids = list(SCHOOLS.keys())
+    weights = [SCHOOLS[sid].get('weight', 50) for sid in ids]
+    return random.choices(ids, weights=weights, k=1)[0]
