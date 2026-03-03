@@ -229,31 +229,31 @@ async def verify3_command(update: Update, context: ContextTypes.DEFAULT_TYPE, db
 
     try:
         async with semaphore:
-        verifier = SpotifyVerifier(verification_id)
+            verifier = SpotifyVerifier(verification_id)
             result = await asyncio.to_thread(verifier.verify)
 
-        db.add_verification(
-            user_id,
-            "spotify_student",
-            url,
-            "success" if result["success"] else "failed",
-            str(result),
-        )
-
-        if result["success"]:
-            result_msg = "✅ Spotify 学生认证成功！\n\n"
-            if result.get("pending"):
-                result_msg += "✨ 文档已提交，等待 SheerID 审核\n"
-                result_msg += "⏱️ 预计审核时间：几分钟内\n\n"
-            if result.get("redirect_url"):
-                result_msg += f"🔗 跳转链接：\n{result['redirect_url']}"
-            await processing_msg.edit_text(result_msg)
-        else:
-            db.add_balance(user_id, VERIFY_COST)
-            await processing_msg.edit_text(
-                f"❌ 认证失败：{result.get('message', '未知错误')}\n\n"
-                f"已退回 {VERIFY_COST} 积分"
+            db.add_verification(
+                user_id,
+                "spotify_student",
+                url,
+                "success" if result["success"] else "failed",
+                str(result),
             )
+
+            if result["success"]:
+                result_msg = "✅ Spotify 学生认证成功！\n\n"
+                if result.get("pending"):
+                    result_msg += "✨ 文档已提交，等待 SheerID 审核\n"
+                    result_msg += "⏱️ 预计审核时间：几分钟内\n\n"
+                if result.get("redirect_url"):
+                    result_msg += f"🔗 跳转链接：\n{result['redirect_url']}"
+                await processing_msg.edit_text(result_msg)
+            else:
+                db.add_balance(user_id, VERIFY_COST)
+                await processing_msg.edit_text(
+                    f"❌ 认证失败：{result.get('message', '未知错误')}\n\n"
+                    f"已退回 {VERIFY_COST} 积分"
+                )
     except Exception as e:
         logger.error("Spotify 验证过程出错: %s", e)
         db.add_balance(user_id, VERIFY_COST)
